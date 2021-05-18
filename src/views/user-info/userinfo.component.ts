@@ -58,7 +58,7 @@ export class UserInfoComponent implements OnInit {
 		if (idToken) {
 			const url = authing.buildLogoutUrl({ expert: true, redirectUri: 'http://localhost:4200', idToken });
 			console.log(url);
-			// window.location.href = url;
+			this.router.navigate(['/login']);
 		}
 	}
 }
