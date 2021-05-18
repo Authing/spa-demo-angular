@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationClient } from 'authing-js-sdk';
-
 @Injectable({
 	providedIn: 'root'
 })
