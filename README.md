@@ -26,7 +26,7 @@ $ yarn start
 
 # 参考文档
 
-[Vue 快速开始](https://docs.authing.cn/v2/quickstarts/spa/angular.html)
+[Angular 快速开始](https://docs.authing.cn/v2/quickstarts/spa/angular.html)
 
 # License
 
