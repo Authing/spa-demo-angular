@@ -1,27 +1,33 @@
-# DemoAngular
+# 安装依赖
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.0.
+运行以下命令安装项目依赖：
 
-## Development server
+```bash
+yarn install
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+# 填写你的应用配置
 
-## Code scaffolding
+```js
+const authing = new AuthenticationClient({
+	appId: 'APP_ID',
+	appHost: 'https://{你的域名}.authing.cn',
+	redirectUri: 'http://localhost:5000/callback'
+});
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# 运行
 
-## Build
+运行本示例程序：
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```bash
+$ yarn start
+```
 
-## Running unit tests
+# 参考文档
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+[Vue 快速开始](https://docs.authing.cn/v2/quickstarts/spa/angular.html)
 
-## Running end-to-end tests
+# License
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+spa-demo-angular is [MIT licensed](https://github.com/Authing/spa-demo-angular//blob/main/LICENSE)
