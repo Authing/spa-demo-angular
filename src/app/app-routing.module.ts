@@ -13,6 +13,10 @@ const routes: Routes = [
 		component: LoginComponent
 	},
 	{
+		path: 'callback',
+		component: UserInfoComponent
+	},
+	{
 		path: 'user-info',
 		component: UserInfoComponent
 	}

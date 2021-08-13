@@ -46,19 +46,14 @@ export class UserInfoComponent implements OnInit {
 	}
 	setUserInfo() {
 		const userInfo = localStorage.getItem('userInfo');
-		this.userInfo = userInfo ? JSON.stringify(userInfo) : 'none';
+		this.userInfo = userInfo ? userInfo : 'not logged in';
 	}
 	setLoading(status: boolean) {
 		this.loading = status;
 	}
 	handleLogout() {
 		const { authing } = this.AuthingSDK;
-		const idToken = localStorage.getItem('idToken');
 		localStorage.clear();
-		if (idToken) {
-			const url = authing.buildLogoutUrl({ expert: true, redirectUri: 'http://localhost:4200', idToken });
-			console.log(url);
-			this.router.navigate(['/login']);
-		}
+		window.location.href = authing.buildLogoutUrl({redirectUri: 'http://localhost:4000'});
 	}
 }
