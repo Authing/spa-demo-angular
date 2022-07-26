@@ -30,12 +30,13 @@ export class EnhancedAuthenticationClient extends AuthenticationClient {
     window.location.href = url
   }
 
-  enhancedLogout (customRedirectUri = '') {
+  enhancedLogout () {
     const redirectUri = window.location.origin
     const idToken = localStorage.getItem('idToken')
+    let logoutUrl = ''
 
     if (idToken) {
-      this.buildLogoutUrl({
+      logoutUrl = this.buildLogoutUrl({
         expert: true,
         redirectUri,
         idToken
@@ -44,7 +45,7 @@ export class EnhancedAuthenticationClient extends AuthenticationClient {
 
     localStorage.clear()
 
-    window.location.href = customRedirectUri || redirectUri
+    window.location.href = logoutUrl || redirectUri
   }
 
   async enchancedLoginCallback () {
