@@ -1,32 +1,112 @@
 import { Component } from '@angular/core';
+import { AuthingSPA } from '@authing/spa-auth-sdk';
+import type {
+  UserInfo,
+  LoginState,
+} from '@authing/spa-auth-sdk/dist/types/global';
 
 @Component({
   selector: 'app-root',
-  template: `
-    <!--The content below is only a placeholder and can be replaced.-->
-    <div style="text-align:center" class="content">
-      <h1>
-        Welcome to {{title}}!
-      </h1>
-      <span style="display: block">{{ title }} app is running!</span>
-      <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-    </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
-    
-  `,
-  styles: []
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'spa-demo-angular';
+
+  loginState: LoginState | null = null;
+  userInfo: UserInfo | null = null;
+  resource: object | null = null;
+
+  private sdk = new AuthingSPA({
+    // 应用的认证地址，例如：https://domain.authing.cn
+    domain: '认证地址',
+    // 应用 ID
+    appId: '应用 ID',
+    // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
+    redirectUri: '登录回调地址',
+    // 登出回调地址，需要在控制台『应用配置 - 登出回调 URL』中指定
+    logoutRedirectUri: '登出回调地址',
+    // 应用侧向 Authing 请求的权限，以空格分隔，默认为 'openid profile'
+    // 成功获取的权限会出现在 Access Token 的 scope 字段中
+    scope: 'openid profile order:read'
+  });
+
+  ngOnInit() {
+    // 校验当前 url 是否是登录回调地址
+    if (this.sdk.isRedirectCallback()) {
+      console.log('redirect');
+
+      /**
+       * 以跳转方式打开 Authing 托管的登录页，认证成功后需要配合 
+       * handleRedirectCallback 方法，在回调端点处理 Authing 发送的
+       * 授权码或 token，获取用户登录态
+       */
+      this.sdk.handleRedirectCallback().then((res) => {
+        this.loginState = res;
+        window.location.replace('/');
+      });
+    } else {
+      this.getLoginState();
+    }
+  }
+
+  /**
+   * 以弹窗方式打开 Authing 托管的登录页
+   */
+  async loginWithPopup() {
+    const res = await this.sdk.loginWithPopup();
+    this.loginState = res;
+  }
+
+  /**
+   * 以跳转方式打开 Authing 托管的登录页
+   */
+  loginWithRedirect() {
+    this.sdk.loginWithRedirect();
+  }
+
+  /**
+   * 获取用户的登录状态
+   */
+  async getLoginState() {
+    const state = await this.sdk.getLoginState();
+    this.loginState = state;
+  }
+
+  /**
+   * 用 Access Token 获取用户身份信息
+   */
+  async getUserInfo() {
+    if (!this.loginState) {
+      alert('用户未登录');
+      return;
+    }
+    const userInfo = await this.sdk.getUserInfo({
+      accessToken: this.loginState.accessToken,
+    });
+    this.userInfo = userInfo;
+  }
+
+  /**
+   * 登出
+   */
+  logout() {
+    this.sdk.logoutWithRedirect();
+  }
+
+  /**
+   * 使用 Access Token 调用资源 API
+   */
+  async handleResource() {
+    try {
+      let res = await fetch('http://localhost:5000/api/protected', {
+        headers: {
+          Authorization: `Bearer ${this.loginState?.accessToken}`,
+        },
+        method: "GET",
+      });
+      let data = await res.json();
+      this.resource = data;
+    } catch (err) {
+      alert("无权访问接口");
+    }
+  }
 }
