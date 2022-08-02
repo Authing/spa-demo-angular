@@ -11,7 +11,7 @@
 
 ## 简介
 
-你可以使用 Authing 快速为新开发的或已有的 Angular 应用集成认证能力。此 Demo 程序将为你演示如何使用 Authing SPA SDK 为 Angular 应用添加认证能力。
+你可以使用 Authing 快速为新开发的或已有的 Angular 应用集成认证能力。此 Demo 程序将为你演示如何使用 Authing Browser SDK 为 Angular 应用添加认证能力。
 
 ## 参考文档
 
@@ -32,7 +32,7 @@
 在 `/src/app/app.component.ts` 第 20 行附近，修改配置为你的应用配置：
 
 ```js
-private sdk = new AuthingSPA({
+private sdk = new Authing({
   // 应用的认证地址，例如：https://domain.authing.cn
   domain: '认证地址',
   appId: '应用 ID',

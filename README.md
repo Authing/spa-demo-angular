@@ -11,7 +11,7 @@
 
 ## Introduction
 
-You can use Authing to quickly integrate authentication capabilities for new or existing Angular applications. This demo will show you how to use the Authing SPA SDK to add authentication capabilities to your Angular application.
+You can use Authing to quickly integrate authentication capabilities for new or existing Angular applications. This demo will show you how to use the Authing Browser SDK to add authentication capabilities to your Angular application.
 
 ## Documentation
 
@@ -33,7 +33,7 @@ In the Authing Console's self-built application, modify your application setting
 In `/src/app/app.component.ts` around line 20, modify the configuration to your application configuration:
 
 ```js
-private sdk = new AuthingSPA({
+private sdk = new Authing({
   // The authentication address of the application, 
   // for example: https://domain.authing.cn
   domain: 'authentication address',

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { AuthingSPA } from '@authing/spa-auth-sdk';
+import { Authing } from '@authing/browser';
 import type {
   UserInfo,
   LoginState,
-} from '@authing/spa-auth-sdk/dist/types/global';
+} from '@authing/browser/dist/types/global';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ export class AppComponent {
   userInfo: UserInfo | null = null;
   resource: object | null = null;
 
-  private sdk = new AuthingSPA({
+  private sdk = new Authing({
     // 应用的认证地址，例如：https://domain.authing.cn
     domain: '认证地址',
     // 应用 ID
